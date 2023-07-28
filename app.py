@@ -4,7 +4,7 @@ from src.logger import logging as lg
 import os, sys
 
 from src.pipelines.trainingpipeline import TrainPipeline
-from src.pipelines.predictionpipeline import PredictionPipeline 
+#from src.pipelines.predictionpipeline import PredictionPipeline 
 
 app = Flask(__name__)
 
@@ -20,3 +20,9 @@ def train_route():
         train_pipeline.run_pipeline()
 
         return "Training Completed ."
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+    
+if __name__ == "__main__":
+    app.run(host="0.0.0.0",port = 5000, debug= True)

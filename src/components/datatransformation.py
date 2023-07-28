@@ -55,7 +55,7 @@ class Data_Transformation :
 
             preprocessor = self.get_data_transformer_object()
 
-            target_column_name = "class"
+            target_column_name = "Good/Bad"
             target_column_mapping = {"+1" : 0, "-1": 1}
 
             # training dataframe 

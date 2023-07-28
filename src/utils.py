@@ -16,8 +16,11 @@ from src.logger import logging
 
 def export_collection_as_dataframe(collection_name, db_name) : #collecting the data as dataframe
     try :
-        mongo_client = MongoClient(os.getenv("MONGO_DB_URL"))
-
+        #uniform resource identifier
+        uri = "mongodb+srv://obaidabubakar377:obaidabubakar377@cluster0.c8jeyzg.mongodb.net/?retryWrites=true&w=majority"
+        
+        mongo_client = MongoClient(uri) # create a new client and connect to the server 
+        
         collection = mongo_client[db_name][collection_name]
 
         df = pd.DataFrame(list(collection.find()))
@@ -58,3 +61,6 @@ def upload_file():
 
 def download_model():
     pass 
+
+def evaluate_model(): 
+    pass

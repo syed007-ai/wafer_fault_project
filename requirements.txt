@@ -5,3 +5,5 @@ matplotlib
 scikit-learn 
 flask
 pymongo 
+boto3
+dill
