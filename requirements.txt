@@ -7,3 +7,7 @@ flask
 pymongo 
 boto3
 dill
+shutil
+dataclasses 
+sys
+os 

@@ -4,7 +4,7 @@ from src.logger import logging as lg
 import os, sys
 
 from src.pipelines.trainingpipeline import TrainPipeline
-#from src.pipelines.predictionpipeline import PredictionPipeline 
+from src.pipelines.predictionpipeline import PredictionPipeline 
 
 app = Flask(__name__)
 
@@ -20,6 +20,27 @@ def train_route():
         train_pipeline.run_pipeline()
 
         return "Training Completed ."
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+@app.route("/upload", methods= ["POST","GET"])
+def upload():
+
+    try :
+
+        if request.method == "POST":
+            prediction_pipeline = PredictionPipeline(request)
+            prediction_file_detail = prediction_pipeline.run_pipeline()
+
+            lg.info("prediction completed. Downloading prediction file")
+            return send_file(prediction_file_detail.prediction_file_path,
+                             download_name= prediction_file_detail.prediction_file_name,
+                             as_attachment= True
+                             )
+        
+        else :
+            return render_template("upload_file.html")
+        
     except Exception as e:
         raise CustomException(e,sys)
     
