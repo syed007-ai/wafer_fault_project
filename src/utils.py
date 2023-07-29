@@ -56,11 +56,53 @@ def load_object(file_path) : # loading our pickle file
     except Exception as e :
         logging.info("Error Occurred in load_object method of utils.py module")
 
-def upload_file():
-    pass
+def upload_file(from_filename, to_filename, bucket_name):
+    try :
+        s3_resource = boto3.resource("s3")
 
-def download_model():
-    pass 
+        s3_resource.meta.client.upload_file(from_filename, bucket_name, to_filename)
 
-def evaluate_model(): 
-    pass
+    except Exception as e :
+        raise CustomException(e,sys)
+    
+
+def download_model(bucket_name, bucket_file_name, best_file_name):
+    try :
+        s3_client = boto3.client("s3")
+
+        s3_client.download_file(bucket_name,bucket_file_name, best_file_name)
+
+        return best_file_name
+    
+    except Exception as e:
+        raise CustomException(e,sys)
+   
+
+def evaluate_model(X,y, models):
+    try :
+        X_train, X_test, y_train, y_test = train_test_split(
+            X,y, test_size= 0.2, random_state= 42
+        ) 
+
+        report = {}
+
+        for i in range(len(list(models))):
+            model = list(models.values())[i]
+
+            model.fit(X_train, y_train)  #train model
+
+            y_train_pred = model.predict(X_train)
+
+            y_test_pred = model.predict(X_test)
+
+            train_model_score = r2_score(y_train, y_train_pred)
+
+            test_model_score = r2_score(y_test, y_test_pred)
+
+            report[list(models.keys())[i]] = test_model_score
+
+        return report 
+    
+    except Exception as e :
+        raise CustomException(e,sys)
+    
